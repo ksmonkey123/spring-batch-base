@@ -13,8 +13,11 @@ import org.springframework.batch.core.repository.JobRepository
 import org.springframework.boot.autoconfigure.batch.JobExecutionExitCodeGenerator
 import org.springframework.boot.autoconfigure.batch.JobLauncherApplicationRunner
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import java.util.*
+import javax.sql.DataSource
 
+@Import(BatchDataSourceConfiguration::class)
 abstract class AwaeBatchConfigurationBase(private val permitRerun: Boolean = true) : DefaultBatchConfiguration() {
 
     @Bean
@@ -51,5 +54,8 @@ abstract class AwaeBatchConfigurationBase(private val permitRerun: Boolean = tru
     @Bean
     fun exitCodeListener() = JobExecutionExitCodeGenerator()
 
+    override fun getDataSource(): DataSource {
+        return applicationContext.getBean("batchMetaDataSource", DataSource::class.java)
+    }
 
 }
