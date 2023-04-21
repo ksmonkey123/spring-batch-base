@@ -1,19 +1,19 @@
-package ch.awae.spring.batch
+package ch.awae.spring.batch.reader
 
 import org.springframework.batch.item.database.JdbcCursorItemReader
 import java.sql.ResultSet
 import javax.sql.DataSource
 
-open class SimpleRowMappingJdbcCursorItemReader<T : Any>(
+open class RowMappingJdbcCursorItemReader<T : Any>(
     dataSource: DataSource,
     sql: String,
-    rowMapping: (ResultSet) -> T?
+    rowMapping: (ResultSet, Int) -> T?
 ) : JdbcCursorItemReader<T>() {
 
     init {
         this.dataSource = dataSource
         this.sql = sql
-        this.setRowMapper { rs, _ -> rowMapping(rs) }
+        this.setRowMapper(rowMapping)
     }
 
 }

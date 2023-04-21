@@ -7,7 +7,7 @@ import javax.sql.DataSource
 open class NamedParameterJdbcBatchItemWriter<T : Any>(
     dataSource: DataSource,
     sql: String,
-    parameterMapping: (T) -> Map<String, *>
+    parameterMapping: (T) -> Map<String, Any?>
 ) : JdbcBatchItemWriter<T>() {
 
     init {
