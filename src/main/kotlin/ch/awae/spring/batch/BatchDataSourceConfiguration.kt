@@ -1,6 +1,7 @@
 package ch.awae.spring.batch
 
 import org.springframework.boot.autoconfigure.batch.BatchDataSource
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -27,6 +28,11 @@ class BatchDataSourceConfiguration {
 
     @Bean
     @Primary
+    @ConditionalOnProperty(
+        value = ["spring.datasource.disabled"],
+        havingValue = "false",
+        matchIfMissing = true
+    )
     fun dataSource(properties: DataSourceProperties): DataSource {
         return properties.initializeDataSourceBuilder().build()
     }
