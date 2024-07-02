@@ -1,5 +1,6 @@
 package ch.awae.spring.batch
 
+import com.zaxxer.hikari.HikariDataSource
 import org.springframework.boot.autoconfigure.batch.BatchDataSource
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
@@ -33,14 +34,16 @@ class BatchDataSourceConfiguration {
         havingValue = "false",
         matchIfMissing = true
     )
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
     fun dataSource(properties: DataSourceProperties): DataSource {
-        return properties.initializeDataSourceBuilder().build()
+        return properties.initializeDataSourceBuilder().type(HikariDataSource::class.java).build()
     }
 
     @Bean
     @BatchDataSource
+    @ConfigurationProperties(prefix = "batchmeta.datasource.hikari")
     fun batchMetaDataSource(@BatchDataSource properties: DataSourceProperties): DataSource {
-        return properties.initializeDataSourceBuilder().build()
+        return properties.initializeDataSourceBuilder().type(HikariDataSource::class.java).build()
     }
 
 }
